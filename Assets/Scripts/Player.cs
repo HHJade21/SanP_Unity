@@ -7,12 +7,14 @@ public class Player : MonoBehaviour
     public float speed;
     Rigidbody2D rigid;
     SpriteRenderer spriter;
+    public Scanner scanner;
     Animator anim;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        scanner = GetComponent<Scanner>();
     }
 
     void FixedUpdate()//물리 연산 프레임마다 호출

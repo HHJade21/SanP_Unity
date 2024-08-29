@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -10,6 +11,8 @@ public class Enemy : MonoBehaviour
 
     bool isLive;
 
+    WaitForFixedUpdate wait;
+
     Rigidbody2D rigid;
     Animator anim;
     SpriteRenderer spriter;
@@ -18,12 +21,13 @@ public class Enemy : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriter = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        wait = new WaitForFixedUpdate();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(!isLive) return;
+        if(!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit")) return;
 
 
         Vector2 dirVec = target.position - rigid.position;
@@ -48,5 +52,32 @@ public class Enemy : MonoBehaviour
         speed = data.speed;
         maxHealth = data.health;
         health = data.health;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(!other.CompareTag("Bullet")) return;
+
+        health -= other.GetComponent<Bullet>().damage;
+        //넉백함수 호출
+        StartCoroutine(knockBack());
+
+        //피격 혹은 사망 애니메이션
+        if(health > 0){
+            anim.SetTrigger("Hit");
+        }
+        else{
+            Dead();
+        }
+    }
+
+    void Dead(){
+        gameObject.SetActive(false);
+    }
+
+    IEnumerator knockBack(){
+        yield return wait; //다음 하나의 물리 프레임 딜레이까지 기다린다.
+        Vector3 playerPos = GameManager.instance.player.transform.position;
+        Vector3 dirVec = transform.position - playerPos;
+        rigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);//얜 또 뭐지???
     }
 }
