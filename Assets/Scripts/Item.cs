@@ -58,9 +58,8 @@ public class Item : MonoBehaviour
             case ItemData.ItemType.Heal:
                 GameManager.instance.health = GameManager.instance.maxHealth;
                 break;
-            
         }
-
+        Debug.Log("Onclick Event Exit");
         if(level == data.damages.Length){//최대레벨에 도달하면
             //버튼 비활성화
             GetComponent<Button>().interactable = false;
