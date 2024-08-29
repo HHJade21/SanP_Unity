@@ -23,6 +23,7 @@ public class Item : MonoBehaviour
     }
 
     public void OnClick(){
+        Debug.Log("CLick!");
         switch(data.itemtype){
             case ItemData.ItemType.Melee:
             case ItemData.ItemType.Range:
