@@ -76,6 +76,7 @@ public class Weapon : MonoBehaviour
     }
 
     void Batch(){
+        Debug.Log("Hello world");
         for(int index = 0; index < count; index++){
 
             Transform bullet;
