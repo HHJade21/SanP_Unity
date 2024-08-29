@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(!other.CompareTag("Bullet")) return;
+        if(!other.CompareTag("Bullet") || !isLive) return;//살아있을때만 충돌이 일어나도록 islive조건도 걸었음.
 
         health -= other.GetComponent<Bullet>().damage;
         //넉백함수 호출
@@ -74,11 +74,13 @@ public class Enemy : MonoBehaviour
         }
         else{//재활용할때 이거 다 되살려야함.
             isLive = false;
-            coll.enabled=false;
+            coll.enabled=false;//죽은 애의 콜라이더가 남아있으면 맵에서 불필요한 충돌이 생김.
             rigid.simulated = false;
-            spriter.sortingOrder = 1;//order in layer 감소시키기
+            spriter.sortingOrder = 1;//order in layer 감소시키기(죽은 애가 플레이어나 다른 몬스터 등을 가리면 안 되니까.)
             anim.SetBool("Dead", true);
             //Dead를 바로 실행시키지 않음.
+            GameManager.instance.kill++;
+            GameManager.instance.GetExp();
         }
     }
 
